@@ -1,4 +1,4 @@
-require 'plist'
+require "plist"
 
 class Webloc
   attr_accessor :url
@@ -9,7 +9,7 @@ class Webloc
 
   def self.load(filename)
     data = File.read(filename)
-    data = data.force_encoding('binary') rescue data
+    data = data.force_encoding("binary") rescue data
 
     if data !~ /\<plist/
       offset = (data =~ /SURL_/)
@@ -17,7 +17,7 @@ class Webloc
       length = length.ord rescue length
       url = data[offset + 7,length]
     else
-      url = Plist::parse_xml(filename)['URL'] rescue nil
+      url = Plist::parse_xml(filename)["URL"] rescue nil
     end
 
     raise ArgumentError unless url
@@ -26,13 +26,13 @@ class Webloc
 
   def data
     @data = "\x62\x70\x6C\x69\x73\x74\x30\x30\xD1\x01\x02\x53\x55\x52\x4C\x5F\x10"
-    @data += @url.length.chr.force_encoding('UTF-8')
+    @data += @url.length.chr.force_encoding("UTF-8")
     @data += @url
     @data += "\x08\x0B\x0F\x00\x00\x00\x00\x00\x00\x01\x01\x00\x00\x00\x00\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-    @data += (@url.length + 18).chr.force_encoding('UTF-8')
+    @data += (@url.length + 18).chr.force_encoding("UTF-8")
   end
 
   def save(filename)
-    File.open(filename, 'w:binary') { |f| f.print data }
+    File.open(filename, "w:binary") { |f| f.print data }
   end
 end
