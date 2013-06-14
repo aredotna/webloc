@@ -14,7 +14,7 @@ class Webloc
   end
 
   def self.parse(data)
-    url = (data !~ /\<plist/) ? bin(data) : plist(data)
+    url = data =~ /\<plist/ ? plist(data) : bin(data)
 
     raise ArgumentError unless url
     new(url)
