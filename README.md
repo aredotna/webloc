@@ -7,7 +7,7 @@ It works on both Ruby 1.9.2 and 1.8.7 (though development is focused on 1.9.2).
 ## Installation
 
     gem install webloc
-    
+
 ## Usage
 
 It's pretty simple.
