@@ -8,4 +8,8 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
-task :default => :test
+task :console do
+  sh "irb -I . -r lib/webloc.rb"
+end
+
+task default: :test
