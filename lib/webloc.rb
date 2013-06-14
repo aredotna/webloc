@@ -10,14 +10,14 @@ class Webloc
   def self.load(filename)
     data = File.read(filename)
     data = data.force_encoding("binary") rescue data
+    parse(data)
+  end
 
+  def self.parse(data)
     if data !~ /\<plist/
-      offset = (data =~ /SURL_/)
-      length = data[offset + 6]
-      length = length.ord rescue length
-      url = data[offset + 7,length]
+      url = bin(data)
     else
-      url = Plist::parse_xml(filename)["URL"] rescue nil
+      url = plist(data)
     end
 
     raise ArgumentError unless url
@@ -35,4 +35,18 @@ class Webloc
   def save(filename)
     File.open(filename, "w:binary") { |f| f.print data }
   end
-end
+
+private
+
+  def self.bin(data)
+    offset = (data =~ /SURL_/)
+    length = data[offset + 6]
+    length = length.ord rescue length
+
+    data[offset + 7,length]
+  end
+
+  def self.plist(data)
+    Plist::parse_xml(data)["URL"] rescue nil
+  end
+end # Webloc
